@@ -16,7 +16,12 @@ def clean_dataframe(df):
         # Remove duplicate rows based on all columns
         df = df.drop_duplicates() # Row duplication
         df = df.dropna()
-        df_cleaned = df.loc[:, ~df.columns.duplicated()] # columns duplication
+        df = df.loc[:, ~df.columns.duplicated()] # columns duplication
+        # OPTIONAL: Id columns to be removed 
+        id_columns = ["Id", "Payment_Id"] 
+        columns_to_drop = [col for col in id_columns if col in df.columns]
+        # Drop the specified columns
+        df_cleaned = df.drop(columns=columns_to_drop)
         return df_cleaned
     except Exception as exp:
         print(f"There is some issue in cleaning dataframe. Issue: {exp}")
@@ -54,7 +59,6 @@ def get_query_dict_from_response(response):
 def main():
 
     st.set_page_config(page_title="AI Assitant for MySQL Database", page_icon=":bar_chart:", layout="wide")
-    st.title("AI Assistant to query from SQL Database")
     st.write("Ask anything about data in SQL database")
     user_message = st.text_input("Enter your question:")
     # Schema Representation for table
